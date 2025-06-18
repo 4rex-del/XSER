@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <title>XUser SHOP</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- ฟอนต์ Kanit -->
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(135deg, #050d18, #0e1629);
+      font-family: 'Kanit', sans-serif;
+      color: #ffffff;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* กล่องล็อกอิน */
+    #loginContainer {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(135deg, #06172e, #000b1a);
+      z-index: 999;
+    }
+
+    #loginBox {
+      background: #0e1a2f;
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 0 20px #00cfff;
+      width: 300px;
+      text-align: center;
+    }
+
+    #loginBox h2 {
+      color: #00eaff;
+      margin-bottom: 20px;
+    }
+
+    #loginBox input {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      background: #101c2e;
+      border: 1px solid #00cfff;
+      border-radius: 8px;
+      color: #fff;
+      font-family: 'Kanit', sans-serif;
+      box-shadow: 0 0 10px #00eaff55;
+    }
+
+    #loginBox button {
+      width: 100%;
+      padding: 10px;
+      background: #00cfff;
+      color: #000;
+      border: none;
+      border-radius: 10px;
+      font-weight: bold;
+      font-size: 16px;
+      cursor: pointer;
+      box-shadow: 0 0 15px #00eaff, 0 0 25px #0099cc;
+    }
+
+    #loginBox button:hover {
+      background: #00aee5;
+      box-shadow: 0 0 20px #00ffff, 0 0 40px #00ccff;
+    }
+
+    /* กล่อง UI แนวยาว */
+    .draggable-ui {
+      display: none; /* ซ่อนไว้ก่อนจนกว่าจะล็อกอินสำเร็จ */
+      flex-direction: row;
+      gap: 30px;
+      background: #0e1a2f;
+      border: 2px solid #00cfff;
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 0 25px #00bfff88;
+      max-width: 90%;
+      position: absolute;
+      top: 50px;
+      left: 50px;
+      cursor: move;
+    }
+
+    .ui-section {
+      flex: 1;
+      min-width: 220px;
+    }
+
+    h2 {
+      color: #00eaff;
+      margin-bottom: 15px;
+      text-shadow: 0 0 10px #00d9ff;
+      font-weight: 700;
+    }
+
+    label {
+      display: block;
+      margin-top: 15px;
+      margin-bottom: 5px;
+      color: #aeeeff;
+      font-weight: 600;
+    }
+
+    select, input[type="range"] {
+      width: 100%;
+      padding: 8px;
+      background: #101c2e;
+      border: 1px solid #00cfff;
+      border-radius: 8px;
+      color: #fff;
+      box-shadow: 0 0 10px #00eaff55;
+      font-family: 'Kanit', sans-serif;
+    }
+
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 60px;
+      height: 30px;
+    }
+
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      background-color: #1e2a3c;
+      border: 2px solid #00cfff;
+      border-radius: 34px;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      transition: .4s;
+      box-shadow: 0 0 15px #00cfff88;
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 22px;
+      width: 22px;
+      left: 4px;
+      bottom: 3px;
+      background-color: white;
+      border-radius: 50%;
+      transition: .4s;
+    }
+
+    input:checked + .slider {
+      background-color: #0088ff;
+      box-shadow: 0 0 15px #00aaff, 0 0 30px #00cfff;
+    }
+
+    input:checked + .slider:before {
+      transform: translateX(28px);
+    }
+
+    .neon-button {
+      background: #00cfff;
+      color: #000;
+      padding: 12px;
+      margin-top: 25px;
+      width: 100%;
+      border: none;
+      border-radius: 10px;
+      font-weight: bold;
+      font-size: 16px;
+      cursor: pointer;
+      box-shadow: 0 0 15px #00eaff, 0 0 25px #0099cc;
+      transition: 0.3s;
+    }
+
+    .neon-button:hover {
+      background: #00aee5;
+      box-shadow: 0 0 20px #00ffff, 0 0 40px #00ccff;
+    }
+
+    span {
+      display: block;
+      text-align: right;
+      color: #00eaff;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- กล่องล็อกอิน -->
+  <div id="loginContainer">
+    <div id="loginBox">
+      <h2>🔐 XSER LOGIN</h2>
+      <input type="text" id="username" placeholder="ชื่อผู้ใช้">
+      <input type="password" id="password" placeholder="รหัสผ่าน">
+      <button onclick="checkLogin()">เข้าสู่ระบบ</button>
+      <p id="loginError" style="color: red; margin-top: 10px;"></p>
+    </div>
+  </div>
+
+  <!-- กล่อง UI ที่ลากได้ -->
+  <div class="draggable-ui" id="draggableBox">
+    <div class="ui-section">
+      <h2>XUser SHOP</h2>
+      <label>💥 BOOSFPS</label>
+      <label class="switch"><input type="checkbox"><span class="slider"></span></label>
+      <label>🎯 AIMLOCK</label>
+      <label class="switch"><input type="checkbox"><span class="slider"></span></label>
+      <label>⚡ จอไว 10x</label>
+      <label class="switch"><input type="checkbox"><span class="slider"></span></label>
+    </div>
+
+    <div class="ui-section">
+      <label>🧠 HEADLOCK</label>
+      <select><option>99%</option><option>100%</option></select>
+
+      <label>🎯 ตำแหน่ง AIMLOCK</label>
+      <select><option>อก</option><option>คอ</option><option>หัว</option></select>
+
+      <label>🖱️ DPI</label>
+      <input type="range" id="dpi" min="100" max="2000" value="800" step="100">
+      <span id="dpiValue">800</span>
+    </div>
+
+    <div class="ui-section">
+      <label>🧲 ความแรงดูดหัว</label>
+      <select id="suction"><option value="high">สูง</option><option value="medium">กลาง</option><option value="low">ต่ำ</option></select>
+      <span id="suctionValue">ระดับ: สูง</span>
+
+      <label>🧰 ระบบช่วยลาก</label>
+      <select id="dragHelp"><option value="on">เปิด</option><option value="off">ปิด</option></select>
+      <span id="dragHelpValue">สถานะ: เปิด</span>
+
+      <button class="neon-button" onclick="alert('✅ บันทึกการตั้งค่าแล้ว!')">✅ ยืนยัน</button>
+    </div>
+  </div>
+
+  <script>
+    // ฟังก์ชันล็อกอิน
+    function checkLogin() {
+      const username = document.getElementById("username").value.trim();
+      const password = document.getElementById("password").value.trim();
+      const errorMsg = document.getElementById("loginError");
+
+      if (username === "XSER SHOP" && password === "Xser") {
+        document.getElementById("loginContainer").style.display = "none";
+        document.getElementById("draggableBox").style.display = "flex";
+      } else {
+        errorMsg.textContent = "ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง";
+      }
+    }
+
+    // แสดงค่า DPI
+    const dpiSlider = document.getElementById('dpi');
+    const dpiValue = document.getElementById('dpiValue');
+    dpiSlider.addEventListener('input', () => {
+      dpiValue.textContent = dpiSlider.value;
+    });
+
+    // เปลี่ยนค่าระดับดูดหัว
+    const suctionSelect = document.getElementById('suction');
+    suctionSelect.addEventListener('change', () => {
+      const level = { high: 'สูง', medium: 'กลาง', low: 'ต่ำ' };
+      document.getElementById('suctionValue').textContent = 'ระดับ: ' + level[suctionSelect.value];
+    });
+
+    const dragHelpSelect = document.getElementById('dragHelp');
+    dragHelpSelect.addEventListener('change', () => {
+      document.getElementById('dragHelpValue').textContent = 'สถานะ: ' + (dragHelpSelect.value === 'on' ? 'เปิด' : 'ปิด');
+    });
+
+    // ฟังก์ชันลาก UI
+    const dragBox = document.getElementById("draggableBox");
+    let isDragging = false;
+    let offsetX, offsetY;
+
+    dragBox.addEventListener("mousedown", function(e) {
+      isDragging = true;
+      offsetX = e.clientX - dragBox.offsetLeft;
+      offsetY = e.clientY - dragBox.offsetTop;
+    });
+
+    document.addEventListener("mouseup", () => isDragging = false);
+    document.addEventListener("mousemove", function(e) {
+      if (isDragging) {
+        dragBox.style.left = (e.clientX - offsetX) + "px";
+        dragBox.style.top = (e.clientY - offsetY) + "px";
+      }
+    });
+  </script>
+
+</body>
+</html>
